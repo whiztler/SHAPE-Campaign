@@ -78,7 +78,7 @@ class Mission
 	randomSeed=15384162;
 	class Intel
 	{
-		briefingName="COxxx SHAPE2015 v1.43";
+		briefingName="COxxx SHAPE2015 v1.44";
 		overviewText="SHAPE - The Oil Wars";
 		resistanceWest=0;
 		timeOfChanges=7200;
