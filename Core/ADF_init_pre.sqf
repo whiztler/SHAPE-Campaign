@@ -4,7 +4,7 @@ ADF version: 1.41 / JULY 2015
 
 Script: Mission init / Variables init
 Author: Whiztler
-Script version: 1.18
+Script version: 1.19
 
 Game type: n/a
 File: ADF_init_pre.sqf
@@ -12,7 +12,7 @@ Previous: ADF_init_vars.sqf
 
 ****************************************************************/
 
-diag_log "ADF RPT: Init - executing ADF_init_pre.sqf"; // Reporting. Do NOT edit/remove
+if (isServer) then {diag_log "ADF RPT: Init - executing ADF_init_pre.sqf"}; // Reporting. Do NOT edit/remove
 
 // Get addon/mod/dlc availability from the A3 config file and store them in easy to use variables
 ADF_dlc_MarksMan 		= isClass (configFile >> "CfgMods" >> "Mark"); // Check if Marksman DLC is present
@@ -43,6 +43,9 @@ tf_no_auto_long_range_radio 	= true;
 ADF_isHC 					= false;
 ADF_GM_init					= false;
 ADF_microDAGR 				= ""; // 140B06
+ADF_gearLoaded				= false;
+ADF_log_CntHC 				= 0;
+ADF_log_rptMods 				= "";
 if (isNil "ADF_HC_connected") then {ADF_HC_connected = false;}; // HC init
  
 player setVariable ["BIS_noCoreConversations",true]; // Disable AI chatter.
@@ -67,3 +70,15 @@ ADF_fnc_log = { // if (ADF_debug) then {["YourTextMessageHere",true] call ADF_fn
 		[ADF_log_write,"systemChat"] call BIS_fnc_MP; // v.39 B6
 	};	
 };
+
+ADF_logID = "CLIENT";
+if (!hasInterface && !isDedicated) then {ADF_logID = "HEADLESS CLIENT"};
+if (isServer) then {ADF_logID = "SERVER"};
+if (isDedicated) then {ADF_logID = "DEDICATED SERVER"};
+
+diag_log ""; diag_log "";
+diag_log "--------------------------------------------------------------------------------------";
+diag_log format ["ADF RPT: %1",ADF_logID];
+diag_log "--------------------------------------------------------------------------------------";
+diag_log ""; diag_log "";
+ADF_logID = nil;

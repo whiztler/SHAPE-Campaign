@@ -1,10 +1,10 @@
 /****************************************************************
 ARMA Mission Development Framework
-ADF version: 1.40 / JUNE 2015
+ADF version: 1.41 / JULY 2015
 
 Script: Mission Config
 Author: Whiztler
-Script version: 1.57
+Script version: 1.60
 
 Game type: n/a
 File: ADF_init_config.sqf
@@ -16,7 +16,7 @@ modules and scripts.
 diag_log "ADF RPT: Init - executing ADF_init_config.sqf"; // Reporting. Do NOT edit/remove
 
 /********** GENERAL **********/
-_ADF_mission_version = 1.45; // Mission version
+ADF_mission_version = 1.47; // Mission version
 _ADF_mission_init_time = 90; // Mission Init time counter. Min 30 secs. Add 1 sec per 2 players. 10 players = 35 secs.
 _ADF_HC_init = true; // Enable the Headless Client [true/false].
 _ADF_HCLB_enable = true; // Enable load balancing across multiple HC's (max 3)
@@ -50,7 +50,7 @@ _ADF_SOR_hand_weapon = 1; // SpecOp/Recon Hand weapon: 1 = 4-five .45.  #  2 = P
 _ADF_CAV_assault_weapon = 1; // Cavalry crew weapon: 1 = MX Compact series  #  2 = Vermin SMG.
 // ACE
 _ADF_ACE3_microDAGR_all = false; // enable the ACE3 MicroDAGR for all players [true/false]
-_ADF_ACE3_microDAGR_leaders = true; // enable the ACE3 MicroDAGR for leadership only [true/false]
+_ADF_ACE3_microDAGR_leaders = true; // enable the ACE3 MicroDAGR for leadership only [true/false]. Note that when both are set to false ACE BFT will be disabled.
 // cTAB
 _ADF_cTAB_side = ADF_playerSide; // Gets the information from ADF_playerside. Only change (EAST, WEST) if needed to.
 _ADF_cTAB_microDAGR_all = false; // enable the ACE3 MicroDAGR for all players [true/false]
@@ -127,6 +127,7 @@ _ADF_ambient_vCiv = true; // enable ambient civilians VEHICLES that spawn around
 _ADF_ambient_vCiv_nr = 1; // number of vehicles to spawn around the players. This nr. is the max nr. of civilian vehicle spawns (no matter the amount of players).
 _ADF_ambient_vCiv_dist = 500; // Vehicle spawn distance from player in meters.
 _ADF_ambient_vCiv_del = 1000; // Vehicle delete distance from player in meters.
+// Note: if for some reason the civilian spawning gets out of hand, one can terminate the civilian spawn scripts (must be admin) by opening the debug console and enter 'ADF_terminateCivScr = true;' and execute globally (click on GLOBAL EXEC).
 
 // Garbage collector
 _ADF_CleanUp = true; // enable cleaning up of dead bodies (friendly, enemy, vehicles, etc.) [true/false].
@@ -140,6 +141,6 @@ _ADF_zeusEagle = true; // Enable the Zeus Eagle? False removes the eagle [true/f
 _ADF_altitude = false; // Enable altitude based fatigue (altitude mountain sickness)? True increases fatigue when > 1500 meter altitude [true/false].
 
 /********** ADF DEV BUILD SETTINGS **********/
-_ADF_tpl_version = 1.41; // ADF version DO NOT EDIT
+ADF_tpl_version = 1.41; // ADF version DO NOT EDIT
 _ADF_devBuild = "Production"; // [Alpha/Beta/Production] DO NOT EDIT
-_ADF_devBuildNr = "06"; // Build number. DO NOT EDIT
+_ADF_devBuildNr = "02"; // Build number. DO NOT EDIT

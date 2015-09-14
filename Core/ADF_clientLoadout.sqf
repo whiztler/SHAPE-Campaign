@@ -12,14 +12,36 @@ File: ADF_clientLoadout.sqf
 NOTE: Gear loads on actual players only. Does not load on AI's!!
 ****************************************************************/
 
-diag_log "ADF RPT: Init - executing ADF_clientLoadout.sqf"; // Reporting. Do NOT edit/remove
+if (isServer) then {diag_log "ADF RPT: Init - executing ADF_clientLoadout.sqf"}; // Reporting. Do NOT edit/remove
+
+// Let the server apply Two Sierra uniform textures globally after the client loadout has been applied fully > 1.41 - 5.60
+if (isServer) then {
+	if (ADF_clanName == "Two Sierra") then {
+		[] spawn {
+			if (isMultiplayer) then {ADF_uArray = playableUnits;} else {ADF_uArray = switchableUnits};
+			sleep 20; // wait till units have geared up
+			{_x setObjectTextureGlobal [0, "\a3\characters_f\BLUFOR\Data\clothing_sage_co.paa"]} forEach ADF_uArray; 
+			ADF_uArray = nil;
+		};
+	};
+	if (ADF_clanName == "Wolfpack") then {
+		[] spawn {
+			if (isMultiplayer) then {ADF_uArray = playableUnits;} else {ADF_uArray = switchableUnits};
+			sleep 20; // wait till units have geared up
+			{_x setObjectTextureGlobal [0, "\A3\Characters_F\Common\Data\basicbody_black_co.paa"]} forEach ADF_uArray; 
+			ADF_uArray = nil;
+		};
+	};	
+};
 
 _ADF_perfDiagStart = diag_tickTime;
 if (ADF_debug) then {["LOADOUT - Loadout Client started",false] call ADF_fnc_log};
+
 If (IsDedicated || !(local player) || ADF_isHC) exitWith {}; // 5.43
-private ["_ADF_noLoadout"];
 _ADF_noLoadout = param [15, false, [true,false]];
-if (_ADF_noLoadout) exitWith {if (ADF_debug) then {["Loadout - noLoadout option selected. Exiting loadout client.",false] call ADF_fnc_log;} else {diag_log "ADF RPT: Loadout - noLoadout option selected. Exiting loadout client.";};};
+if (_ADF_noLoadout) exitWith {if (ADF_debug) then {["Loadout - noLoadout option selected. Exiting loadout client.",false] call ADF_fnc_log; ADF_gearLoaded = true; publicVariableServer "ADF_gearLoaded";} else {diag_log "ADF RPT: Loadout - noLoadout option selected. Exiting loadout client."; ADF_gearLoaded = true; publicVariableServer "ADF_gearLoaded";}};
+// Two Sierra exit
+if (ADF_clanName == "TWO SIERRA") exitWith {player execVM "Core\F\ADF_fnc_Loadout2S.sqf";};
 
 //Init vars
 private [
@@ -80,7 +102,7 @@ if ((_ADF_unitFaction == "BLU_F") && _ADF_customLoadout_MOD) exitWith { // BLUFO
 	
 	// Split the player variable into Squad, Role
 	_ADF_unitString = str _ADF_unit;
-	_u = [_ADF_unitString, "_"] call CBA_fnc_split;
+	_u = _ADF_unitString splitString "_";
 	_s = toLower (_u select 0);
 	_r = toLower (_u select 1);
 	
@@ -110,22 +132,22 @@ if ((_ADF_unitFaction == "BLU_F") && _ADF_customLoadout_MOD) exitWith { // BLUFO
 	// SOR uniform texture update
 	if (_s == "sor") then {
 		[_ADF_unit] spawn {
-			ADF_sorUnits = [];		
-			// Check if the SOR groups are populated/exist and add to ADF_sorUnits array
-			if !(isNil "gCO_4") then {ADF_sorUnits pushBack gCO_4};
-			if !(isNil "gCO_41M") then {ADF_sorUnits pushBack gCO_41M};
-			if !(isNil "gCO_41R") then {ADF_sorUnits pushBack gCO_41R};
-			if !(isNil "gCO_41Y") then {ADF_sorUnits pushBack gCO_41Y};
-			if !(isNil "gCO_41Z") then {ADF_sorUnits pushBack gCO_41Z};			
-		
 			waitUntil {time > 10};
 			
-			player setObjectTexture [0, "\A3\Characters_F\Common\Data\basicbody_black_co.paa"];
-			{
-				{			
-					_x setObjectTexture [0, "\A3\Characters_F\Common\Data\basicbody_black_co.paa"];
-				} forEach units _x;
-			} forEach ADF_sorUnits;
+			// Add Uniform EH
+			player addEventHandler ["Take", {
+				(getObjectTextures player + [uniformContainer player getVariable "texture"])
+				params ["_texUniform", "_texInsignia", "_texCustom"];
+				if (isNil "_texCustom") exitWith {};
+				if (_texUniform == _texCustom) exitWith {};
+				player setObjectTextureGlobal [0, _texCustom];
+				if (ADF_Clan_uniformInsignia) then {[player,"CLANPATCH"] call BIS_fnc_setUnitInsignia};
+				false
+			}];
+
+			// Set local Texture
+			_ADF_texture =  "\A3\Characters_F\Common\Data\basicbody_black_co.paa";
+			uniformContainer player setVariable ["texture", _ADF_texture, true];
 		};
 	};
 	

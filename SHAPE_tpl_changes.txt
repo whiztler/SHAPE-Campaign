@@ -1,4 +1,8 @@
-V. 1.45
+V. 1.47
+- Updated: applied ADF 1.41 final
+- For changes see ADF_readme.html
+_________________________________________________________________________________
+V. 1.45/6
 - Updated: applied ADF 1.41
 - For changes see ADF_readme.html
 _________________________________________________________________________________

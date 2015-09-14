@@ -33,12 +33,12 @@ respawnTemplatesCiv[] = {};
 /**********  Loading Screen **********/
 author = "SHAPE Team";
 overviewText = "shape-arma.com";
-onLoadName = $STR_ADF_DescExt_onLoadName;
+onLoadName = "Mission Name";
 onLoadMission = "Day XX - XX XXX 2015";
 onLoadIntroTime = false;
 onLoadMissionTime = false;
 loadScreen = "Img\mission_intro_SHAPE.paa";
-onLoadIntro = $STR_ADF_DescExt_onLoadIntro;
+onLoadIntro = "Powered by ADF";
 
 /**********  Mission specific settings **********/
 showGPS = 1; // Allow GPS where (0=disallowed), (1=allowed)
